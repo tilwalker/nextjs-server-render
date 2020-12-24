@@ -1,10 +1,3 @@
-import Head from 'next/head'
-import ErrorPage from '../components/error/ErrorPage';
+import HelloWorld from '../src/components/hello-world/HelloWorld'
 
-export default function Home() {
-  return (
-    <div>
-      <ErrorPage />
-    </div>
-  )
-}
+export default HelloWorld

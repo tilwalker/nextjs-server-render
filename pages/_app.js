@@ -1,78 +1,49 @@
-import '../styles.scss';
-import App from 'next/app';
-import React from 'react';
-// import { useRouter } from 'next/router'
-// import ErrorPage from '../components/error/ErrorPage';
-import { Layout } from "../_metronic/layout";
-import { Provider } from "react-redux";
-import { PersistGate } from "redux-persist/integration/react";
-import withRedux from 'next-redux-wrapper';
-// import AsyncStorage from '@react-native-community/async-storage';
-import reduxStore from '../redux/store';
-// const persistConfig = {
-//   //...
-//   storage: AsyncStorage,
-// }
+import { ThemeProvider, createGlobalStyle } from 'styled-components'
+import { Helmet } from 'react-helmet'
+import withRedux from 'next-redux-wrapper'
+import { Provider } from 'react-redux'
+import styledNormalize from 'styled-normalize'
+import { withRouter } from 'next/router'
+import App from 'next/app'
+
+import createStore from '../src/redux/store'
+import Layout from '../src/components/layout/Layout'
+import theme from '../src/theme'
+import 'bootstrap/dist/css/bootstrap.min.css'
+
+const GlobalStyle = createGlobalStyle`
+  ${styledNormalize}
+`
+
 class MyApp extends App {
-
-  static async getInitialProps({Component, ctx}) {
-    const pageProps = Component.getInitialProps ? await Component.getInitialProps(ctx) : {};
-
-    //Anything returned here can be access by the client
-    return {pageProps: pageProps};
-  }
-
-  render() {
-    //pageProps that were returned  from 'getInitialProps' are stored in the props i.e. pageprops
-    const { Component, pageProps, store } = this.props;
-
-    // redirect to error page
-    // if() {
-    //   return <ErrorPage />
-    // }
+  render () {
+    const { Component, pageProps, router, store } = this.props
+    const title = 'Hello next.js Real World!'
+    console.log(this.props, 'props>>>');
     return (
-      <Provider store={store}>
-        <PersistGate persistor={persistConfig}>
-          {
-            router.pathname === '/auth' ?
-              <div id="kt_body"
-                className="quick-panel-right demo-panel-right offcanvas-right header-fixed header-mobile-fixed subheader-enabled subheader-fixed aside-enabled aside-fixed aside-minimize-hoverable brand-dark"
-              >
-                <div id="root">
-                  <Component {...pageProps} />
-                </div>
-              </div>:
-              <div id="kt_body"
-                className="quick-panel-right demo-panel-right offcanvas-right header-fixed header-mobile-fixed subheader-enabled subheader-fixed aside-enabled aside-fixed aside-minimize-hoverable brand-dark"
-              >
-                <div id="root">
-                  <Layout>
-                    <Component {...pageProps} />
-                  </Layout>
-                  <div id="splash-screen" className="kt-splash-screen">
-                    <img
-                      src="/media/logos/logo-dark.png"
-                      alt="Metronic logo"
-                    />
-                    <svg className="splash-spinner" viewBox="0 0 50 50">
-                      <circle className="path"
-                        cx="25"
-                        cy="25"
-                        r="20"
-                        fill="none"
-                        strokeWidth="5"
-                      ></circle>
-                    </svg>
-                  </div>
-                  <div id="layout-portal"></div>
-                </div>
-              </div>
-          }
-        </PersistGate>
-      </Provider>
+      <>
+        <Helmet>
+          <title>{title}</title>
+          <meta name='viewport' content='width=device-width, initial-scale=1' />
+          <meta property='og:title' content={title} />
+        </Helmet>
+        <ThemeProvider theme={theme}>
+          <Provider store={store}>
+            <GlobalStyle />
+            {
+              router.pathname === '/auth' ?
+              <Component router={router} {...pageProps} />
+              : <Layout>
+                  <Component router={router} {...pageProps} />
+                </Layout>
+            }
+          </Provider>
+        </ThemeProvider>
+      </>
     )
   }
 }
-const makeStore = () => reduxStore;
- 
-export default withRedux(makeStore)(MyApp);
+
+export default withRedux(createStore)(
+  withRouter(MyApp)
+)

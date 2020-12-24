@@ -1,0 +1,62 @@
+.auth {
+    &-parent {
+        .row > * {
+            padding: 0
+        }
+    }
+    &-background {
+        padding: 32.5px;
+        display: flex;
+        justify-content: space-between;
+        flex-direction: column;
+        background-image: url(/bg-4.jpg);
+        height: 100vh;
+
+        .brand > h2 {
+            color: #fff
+        }
+    }
+}
+
+.login {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .wrapper--absolute {
+        position: absolute;
+        top: 16px;
+        right: 16px;
+    }
+    &-form {
+        max-width: 400px;
+        input {
+            background-color: #f3f6f9;
+            border-color: #f3f6f9;
+            color: #3f4254;
+            transition: color .15s ease,background-color .15s ease,border-color .15s ease,box-shadow .15s ease;
+            padding: 16px;
+            height: unset;
+        }
+        .btn {
+            padding: 12px 30px;
+            height: unset;
+        }
+    }
+    .action {
+        justify-content: space-between;
+    }
+    .card-alert {
+        border-radius: 4px;
+        padding: 1.5rem;
+        background-color: #eee5ff;
+        border-color: transparent;
+        font-size: 13px!important;
+        font-weight: 400;
+        font-family: Poppins,Helvetica,"sans-serif";
+        color: #8950fc;
+        span {
+            font-weight: 600
+        }
+    }
+}
